@@ -9,4 +9,16 @@ class YogaClassBooking extends Model
 {
     /** @use HasFactory<\Database\Factories\YogaClassBookingFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'yoga_class_id',
+        'name',
+        'email',
+        'phone',
+    ];
+
+    public function yogaClass()
+    {
+        return $this->belongsTo(YogaClass::class);
+    }
 }
