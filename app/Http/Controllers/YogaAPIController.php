@@ -60,33 +60,34 @@ class YogaAPIController extends Controller
 
 
     // get all classes
-    // eg. endpoint - http://127.0.0.1:8000/api/classes?day_of_week=Tuesday&time_of_course=00:25&date_of_class=02/24/2000
     public function getClasses(Request $request)
     {
-        // get filter params from request
         $day_of_week = $request->input('day_of_week');
-        // $time_of_course = $request->input('time_of_course');
-        // $date_of_class = $request->input('date_of_class');
         $ids = $request->input('ids');
-        Log::info("day_of_week: " . $day_of_week);
-        // get courses by day_of_week
+
         $courses = YogaCourse::query();
         if($day_of_week){
             $courses->where('day_of_week', $day_of_week);
         }
 
-
         $courses = $courses->get();
 
-        // get classes by courses
+        if($courses->count() == 0){
+            return response()->json([
+                'message' => 'No classes found',
+                'dto' => [],
+                'filterParams' =>   [
+                    'day_of_week' => $day_of_week,
+                    'ids' => $ids,
+                ]
+            ], 404);
+        }
+
         $classes = YogaClass::query();
 
-        // filter classes by courses
         if($courses->count() > 0){
             $classes->whereIn('yoga_course_id', $courses->pluck('id'));
         }
-
-        // filter classes by ids
         if($ids){
             $classes->whereIn('id', explode(',', $ids));
         }
@@ -99,8 +100,6 @@ class YogaAPIController extends Controller
                 'dto' => YogaClassResource::collection($classes),
                 'filterParams' =>   [
                     'day_of_week' => $day_of_week,
-                    // 'time_of_course' => $time_of_course,
-                    // 'date_of_class' => $date_of_class,
                     'ids' => $ids,
                 ]
             ]);
@@ -349,5 +348,49 @@ class YogaAPIController extends Controller
             ], 500);
         }
     }
+
+    // get classes by booking information - freeWord for name, email, phone
+    public function getClassesByBookingInfo(Request $request)
+    {
+        // filter by - name, email, phone
+        try{
+            Log::info("getClassesByBookingInfo - ", $request->all());
+            // freeWord search
+            $freeWord = $request->input('freeWord');
+
+            $bookings = YogaClassBooking::query();
+
+            if($freeWord){
+                $bookings->where('name', 'like', "%$freeWord%")
+                    ->orWhere('email', 'like', "%$freeWord%")
+                    ->orWhere('phone', 'like', "%$freeWord%");
+            }
+
+            $bookings = $bookings->get();
+
+            $classes = YogaClass::query();
+
+            if($bookings->count() > 0){
+                $classes->whereIn('id', $bookings->pluck('yoga_class_id'));
+            }
+
+            $classes = $classes->with('course')->get();
+
+            return response()->json([
+                'message' => 'Classes retrieved successfully',
+                'dto' => YogaClassResource::collection($classes),
+                'filterParams' => [
+                    'freeWord' => $freeWord,
+                ]
+            ]);
+        }
+        catch(Exception $e){
+            Log::error("Get classes by booking info error: " . $e->getMessage());
+            return response()->json([
+                'message' => 'An error occurred in getClassesByBookingInfo',
+            ], 500);
+        }
+    }
+
 
 }

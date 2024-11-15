@@ -84,4 +84,9 @@ Route::get('/bookings', [
     'getBookings'
 ]);
 
+// get booked classes
+Route::get('/booked-classes',[
+    App\Http\Controllers\YogaAPIController::class,
+    'getClassesByBookingInfo'
+]);
 
