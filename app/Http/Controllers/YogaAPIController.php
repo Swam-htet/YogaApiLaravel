@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\BookingResource;
 use App\Http\Resources\YogaClassResource;
 use App\Http\Resources\YogaClassDetailResource;
 use App\Models\YogaClass;
@@ -13,30 +14,10 @@ use Illuminate\Support\Facades\Log;
 
 class YogaAPIController extends Controller
 {
-    //
-
     // upload data
     public function uploadData(Request $request)
     {
-        Log::info($request->all());
         try{
-            // $request->validate([
-            //     'courses' => 'required|array',
-            //     'courses.*.day_of_week' => 'required|string',
-            //     'courses.*.time_of_course' => 'required|string',
-            //     'courses.*.capacity' => 'required|integer|min:1',
-            //     'courses.*.duration' => 'required|integer|min:1',
-            //     'courses.*.price_per_class' => 'required|numeric|min:0',
-            //     'courses.*.type_of_class' => 'required|string',
-            //     'courses.*.description' => 'nullable|string',
-            //     'courses.*.location' => 'nullable|string',
-            //     'classes' => 'required|array',
-            //     'classes.*.yoga_course_id' => 'required|exists:courses,id',
-            //     'classes.*.date' => 'required|date',
-            //     'classes.*.teacher' => 'required|string',
-            //     'classes.*.additional_comments' => 'nullable|string',
-            // ]);
-
             collect($request->input('courses'))->map(function ($course) {
                 return YogaCourse::create($course);
             });
@@ -50,6 +31,7 @@ class YogaAPIController extends Controller
             ], 201);
         }
         catch(Exception $e){
+            Log::error("Upload data error: " . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred',
             ], 500);
@@ -69,6 +51,7 @@ class YogaAPIController extends Controller
             ]);
         }
         catch(Exception $e){
+            Log::error("Reset db error: " . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred in resetDB',
             ], 500);
@@ -85,7 +68,7 @@ class YogaAPIController extends Controller
         // $time_of_course = $request->input('time_of_course');
         // $date_of_class = $request->input('date_of_class');
         $ids = $request->input('ids');
-
+        Log::info("day_of_week: " . $day_of_week);
         // get courses by day_of_week
         $courses = YogaCourse::query();
         if($day_of_week){
@@ -102,15 +85,6 @@ class YogaAPIController extends Controller
         if($courses->count() > 0){
             $classes->whereIn('yoga_course_id', $courses->pluck('id'));
         }
-
-        // if($date_of_class){
-        //     // Convert date_of_class to Y-m-d format
-        //     $classes->whereDate('date', date('Y-m-d', strtotime($date_of_class)));
-        // }
-
-        // if($time_of_course){
-        //     $classes->where('time_of_course', $time_of_course);
-        // }
 
         // filter classes by ids
         if($ids){
@@ -132,6 +106,7 @@ class YogaAPIController extends Controller
             ]);
         }
         catch(Exception $e){
+            Log::error("Get classes error: " . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred in getClasses',
             ], 500);
@@ -154,6 +129,7 @@ class YogaAPIController extends Controller
             ]);
         }
         catch(Exception $e){
+            Log::error("Get class by id error: " . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred in getClassById',
             ], 500);
@@ -165,20 +141,6 @@ class YogaAPIController extends Controller
     public function bookClass(Request $request)
     {
         try{
-            // $request->validate([
-            //     // eg. class_ids=1,2,3,4
-            //     'class_ids' => ['required', 'string', function($attribute, $value, $fail) {
-            //         $ids = explode(',', $value);
-            //         $classes = YogaClass::whereIn('id', $ids)->get();
-            //         if($classes->count() !== count($ids)){
-            //             $fail('One or more classes do not exist');
-            //         }
-            //     }],
-            //     'name' => 'required|string',
-            //     'email' => 'required|email',
-            //     'phone' => 'required|string',
-            // ]);
-
             $booking = collect(explode(',', $request->input('class_ids')))->map(function($class_id) use ($request) {
                 return YogaClassBooking::create([
                     'yoga_class_id' => $class_id,
@@ -195,6 +157,7 @@ class YogaAPIController extends Controller
             ], 201);
         }
         catch(Exception $e){
+            Log::error("Book class error: " . $e->getMessage());
             return response()->json([
                 'message' => $e->getMessage(),
             ], 500);
@@ -212,6 +175,7 @@ class YogaAPIController extends Controller
             ]);
         }
         catch(Exception $e){
+            Log::error("Get courses error: " . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred in getCourses',
             ], 500);
@@ -230,6 +194,7 @@ class YogaAPIController extends Controller
             ], 201);
         }
         catch(Exception $e){
+            Log::error("Create course error: " . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred in createCourse',
             ], 500);
@@ -253,6 +218,7 @@ class YogaAPIController extends Controller
             ]);
         }
         catch(Exception $e){
+            Log::error("Update course error: " . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred in updateCourse',
             ], 500);
@@ -275,6 +241,7 @@ class YogaAPIController extends Controller
             ]);
         }
         catch(Exception $e){
+            Log::error("Delete course error: " . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred in deleteCourse',
             ], 500);
@@ -293,6 +260,7 @@ class YogaAPIController extends Controller
             ], 201);
         }
         catch(Exception $e){
+            Log::error("Create class error: " . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred in createClass',
             ], 500);
@@ -317,6 +285,7 @@ class YogaAPIController extends Controller
             ]);
         }
         catch(Exception $e){
+            Log::error("Update class error: " . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred in updateClass',
             ], 500);
@@ -339,6 +308,7 @@ class YogaAPIController extends Controller
             ]);
         }
         catch(Exception $e){
+            Log::error("Delete class error: " . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred in deleteClass',
             ], 500);
@@ -346,36 +316,34 @@ class YogaAPIController extends Controller
     }
 
     // get all bookings
-    public function getBookings()
+    public function getBookings(Request $request)
     {
         // filter by - name, email, phone
         try{
 
+            // freeWord search
+            $freeWord = $request->input('freeWord');
+
             $bookings = YogaClassBooking::query();
 
-            $name = request('name');
-            if($name){
-                $bookings->where('name', 'like', "%$name%");
-            }
-
-            $email = request('email');
-            if($email){
-                $bookings->where('email', 'like', "%$email%");
-            }
-
-            $phone = request('phone');
-            if($phone){
-                $bookings->where('phone', 'like', "%$phone%");
+            if($freeWord){
+                $bookings->where('name', 'like', "%$freeWord%")
+                    ->orWhere('email', 'like', "%$freeWord%")
+                    ->orWhere('phone', 'like', "%$freeWord%");
             }
 
             $bookings = $bookings->get();
 
             return response()->json([
                 'message' => 'Bookings retrieved successfully',
-                'dto' => $bookings,
+                'dto' => BookingResource::collection($bookings),
+                'filterParams' => [
+                    'freeWord' => $freeWord,
+                ]
             ]);
         }
         catch(Exception $e){
+            Log::error("Get bookings error: " . $e->getMessage());
             return response()->json([
                 'message' => 'An error occurred in getBookings',
             ], 500);
