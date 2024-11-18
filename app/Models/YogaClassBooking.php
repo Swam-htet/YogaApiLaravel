@@ -12,9 +12,7 @@ class YogaClassBooking extends Model
 
     protected $fillable = [
         'yoga_class_id',
-        'name',
         'email',
-        'phone',
     ];
 
     public function yogaClass()

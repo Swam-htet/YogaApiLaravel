@@ -18,9 +18,10 @@ class YogaClassFactory extends Factory
     {
         return [
             // in format 12/11/2024
-            'date' => $this->faker->date('m/d/Y'),
-            'teacher' => $this->faker->name(),
-            'additional_comments' => $this->faker->sentence(),
+            'date' => $this->faker->date(),
+            'teacher' => $this->faker->name,
+            'additional_comments' => $this->faker->sentence,
+            'yoga_course_id' => \App\Models\YogaCourse::factory(),
         ];
     }
 }

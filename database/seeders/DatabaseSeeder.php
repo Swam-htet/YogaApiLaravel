@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\YogaCourse;
 use App\Models\YogaClass;
+use App\Models\YogaClassBooking;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -24,5 +25,8 @@ class DatabaseSeeder extends Seeder
                 YogaClass::factory(2)->make()->toArray()
             );
         });
+
+        // 30 bookings
+        YogaClassBooking::factory(30)->create();
     }
 }

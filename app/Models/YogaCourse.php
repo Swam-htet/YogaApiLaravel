@@ -18,7 +18,7 @@ class YogaCourse extends Model
         'price_per_class',
         'type_of_class',
         'description',
-        'location',
+        'class_mode',
     ];
 
     public function classes()

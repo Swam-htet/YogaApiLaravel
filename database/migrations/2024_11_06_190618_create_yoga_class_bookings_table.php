@@ -13,10 +13,8 @@ return new class extends Migration
     {
         Schema::create('yoga_class_bookings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('yoga_class_id')->constrained()->onDelete('cascade');
-            $table->string('name');
+            $table->foreignId('yoga_class_id')->constrained('yoga_classes')->onDelete('cascade');
             $table->string('email');
-            $table->string('phone');
             $table->timestamps();
         });
     }

@@ -16,13 +16,9 @@ class YogaClassResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            // 'yoga_course_id' => $this->yoga_course_id,
             'date' => $this->date,
             'teacher' => $this->teacher,
             'additional_comments' => $this->additional_comments,
-            // 'created_at' => $this->created_at,
-            // 'updated_at' => $this->updated_at,
-            'course' => new YogaCourseResource($this->whenLoaded('course'))
         ];
   }
 }

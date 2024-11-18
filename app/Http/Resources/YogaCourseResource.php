@@ -16,7 +16,7 @@ class YogaCourseResource extends JsonResource
             'price_per_class' => $this->price_per_class,
             'type_of_class' => $this->type_of_class,
             'description' => $this->description,
-            'location' => $this->location,
+            'class_mode' => $this->class_mode,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

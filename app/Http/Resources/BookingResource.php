@@ -16,9 +16,8 @@ class BookingResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'name' => $this->name,
             'email' => $this->email,
-            'phone' => $this->phone,
+            'class' => new YogaClassResource($this->yogaClass),
         ];
     }
 }

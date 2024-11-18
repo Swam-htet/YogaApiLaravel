@@ -17,7 +17,8 @@ class YogaClassBookingFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'email' => $this->faker->email,
+            'yoga_class_id' => \App\Models\YogaClass::factory(),
         ];
     }
 }

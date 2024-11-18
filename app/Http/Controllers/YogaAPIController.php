@@ -184,7 +184,6 @@ class YogaAPIController extends Controller
     // create course
     public function createCourse(Request $request)
     {
-        // request's day_of_week, time_of_course, capacity, duration, price_per_class, type_of_class, description, location
         try{
             $course = YogaCourse::create($request->all());
             return response()->json([

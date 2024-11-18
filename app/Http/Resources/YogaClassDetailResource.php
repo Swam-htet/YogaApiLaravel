@@ -9,7 +9,6 @@ class YogaClassDetailResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            // 'yoga_course_id' => $this->yoga_course_id,
             'date' => $this->date,
             'teacher' => $this->teacher,
             'additional_comments' => $this->additional_comments,
