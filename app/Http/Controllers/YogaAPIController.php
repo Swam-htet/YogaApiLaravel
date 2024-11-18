@@ -320,7 +320,7 @@ class YogaAPIController extends Controller
         try{
 
             // freeWord search
-            $freeWord = $request->input('freeWord');
+            $freeWord = $request->input('email');
 
             $bookings = YogaClassBooking::query();
 
@@ -348,21 +348,18 @@ class YogaAPIController extends Controller
         }
     }
 
-    // get classes by booking information - freeWord for name, email, phone
+    // get classes by booking information - email
     public function getClassesByBookingInfo(Request $request)
     {
         // filter by - name, email, phone
         try{
-            Log::info("getClassesByBookingInfo - ", $request->all());
             // freeWord search
-            $freeWord = $request->input('freeWord');
+            $email = $request->input('email');
 
             $bookings = YogaClassBooking::query();
 
-            if($freeWord){
-                $bookings->where('name', 'like', "%$freeWord%")
-                    ->orWhere('email', 'like', "%$freeWord%")
-                    ->orWhere('phone', 'like', "%$freeWord%");
+            if($email){
+                $bookings->where('email', 'like', "%$email%");
             }
 
             $bookings = $bookings->get();
@@ -377,9 +374,9 @@ class YogaAPIController extends Controller
 
             return response()->json([
                 'message' => 'Classes retrieved successfully',
-                'dto' => YogaClassResource::collection($classes),
+                'dto' => YogaClassDetailResource::collection($classes),
                 'filterParams' => [
-                    'freeWord' => $freeWord,
+                    'freeWord' => $email,
                 ]
             ]);
         }
