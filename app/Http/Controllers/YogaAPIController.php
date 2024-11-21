@@ -11,6 +11,8 @@ use App\Models\YogaClassBooking;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+
 
 class YogaAPIController extends Controller
 {
@@ -18,13 +20,22 @@ class YogaAPIController extends Controller
     public function uploadData(Request $request)
     {
         try{
-            collect($request->input('courses'))->map(function ($course) {
-                return YogaCourse::create($course);
-            });
 
-            collect($request->input('classes'))->map(function ($class) {
-                return YogaClass::create($class);
-            });
+            $courses = $request->input('courses');
+
+            foreach($courses as $course){
+                $yogaCourse = YogaCourse::create($course);
+            }
+
+            $classes = $request->input('classes');
+
+            Log::info("message : ", $request->all());
+
+            foreach($classes as $class){
+
+                $class['date'] = Carbon::createFromFormat('d/m/Y', $class['date'])->format('Y-m-d');
+                $yogaClass = YogaClass::create($class);
+            }
 
             return response()->json([
                 'message' => 'Data uploaded successfully',
@@ -184,6 +195,10 @@ class YogaAPIController extends Controller
     // create course
     public function createCourse(Request $request)
     {
+<<<<<<< HEAD
+=======
+        // request's day_of_week, time_of_course, capacity, duration, price_per_class, type_of_class, description, mode
+>>>>>>> main
         try{
             $course = YogaCourse::create($request->all());
             return response()->json([
@@ -250,8 +265,18 @@ class YogaAPIController extends Controller
     public function createClass(Request $request)
     {
         // request's yoga_course_id, date, teacher, additional_comments
+        $data = $request->validate([
+            'yoga_course_id' => 'required',
+            'date' => 'required',
+            'teacher' => 'required',
+            'additional_comments', 'nullable'
+        ]);
+
+
         try{
-            $class = YogaClass::create($request->all());
+
+            $data['date'] = Carbon::createFromFormat('d/m/Y', $data['date'])->format('Y-m-d');
+            $class = YogaClass::create($data);
             return response()->json([
                 'message' => 'Class created successfully',
                 'dto' => $class,

@@ -17,14 +17,15 @@ class YogaCourseFactory extends Factory
     public function definition(): array
     {
         return [
-            'day_of_week' => $this->faker->dayOfWeek,
-            'time_of_course' => $this->faker->time(),
-            'capacity' => $this->faker->numberBetween(1, 100),
-            'duration' => $this->faker->numberBetween(1, 3),
-            'price_per_class' => $this->faker->randomFloat(2, 10, 100),
-            'type_of_class' => $this->faker->word,
-            'description' => $this->faker->sentence,
-            'class_mode' => $this->faker->word,
+            'day_of_week' => $this->faker->dayOfWeek(),
+            // time in format - '10:00'
+            'time_of_course' => $this->faker->time('H:i'),
+            'capacity' => $this->faker->numberBetween(5, 20),
+            'duration' => $this->faker->numberBetween(30, 90),
+            'price_per_class' => $this->faker->randomFloat(2, 10, 50),
+            'type_of_class' => $this->faker->randomElement(['Hatha', 'Vinyasa', 'Ashtanga', 'Yin', 'Kundalini']),
+            'description' => $this->faker->sentence(),
+            'mode' => $this->faker->address(),
         ];
     }
 }
