@@ -14,6 +14,7 @@ class YogaClass extends Model
     protected $table = 'yoga_classes';
 
     protected $fillable = [
+        'id',
         'yoga_course_id',
         'date',
         'teacher',

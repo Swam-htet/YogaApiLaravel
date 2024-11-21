@@ -17,6 +17,7 @@ class YogaAPIController extends Controller
     public function uploadData(Request $request)
     {
         try{
+            Log::info("uploadData - ", $request->all());
             collect($request->input('courses'))->map(function ($course) {
                 return YogaCourse::create($course);
             });

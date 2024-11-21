@@ -11,6 +11,7 @@ class YogaCourse extends Model
     use HasFactory;
 
     protected $fillable = [
+        'id',
         'day_of_week',
         'time_of_course',
         'capacity',
