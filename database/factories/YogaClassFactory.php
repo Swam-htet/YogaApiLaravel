@@ -17,8 +17,7 @@ class YogaClassFactory extends Factory
     public function definition(): array
     {
         return [
-            // in format 12/11/2024
-            'date' => $this->faker->date('m/d/Y'),
+            'date' => $this->faker->date('Y-m-d'),
             'teacher' => $this->faker->name(),
             'additional_comments' => $this->faker->sentence(),
         ];

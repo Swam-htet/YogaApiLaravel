@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('yoga_classes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('yoga_course_id')->constrained('yoga_courses')->onDelete('cascade');
+            $table->foreignId('yoga_course_id')->constrained()->onDelete('cascade');
             $table->date('date');
             $table->string('teacher');
             $table->text('additional_comments')->nullable();

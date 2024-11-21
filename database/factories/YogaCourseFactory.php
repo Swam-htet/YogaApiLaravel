@@ -25,7 +25,7 @@ class YogaCourseFactory extends Factory
             'price_per_class' => $this->faker->randomFloat(2, 10, 50),
             'type_of_class' => $this->faker->randomElement(['Hatha', 'Vinyasa', 'Ashtanga', 'Yin', 'Kundalini']),
             'description' => $this->faker->sentence(),
-            'location' => $this->faker->address(),
+            'mode' => $this->faker->address(),
         ];
     }
 }

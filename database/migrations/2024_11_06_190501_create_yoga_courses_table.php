@@ -20,7 +20,7 @@ return new class extends Migration
             $table->decimal('price_per_class', 8, 2);
             $table->string('type_of_class');
             $table->text('description')->nullable();
-            $table->string('location')->nullable();
+            $table->string('mode')->nullable();
             $table->timestamps();
         });
     }
