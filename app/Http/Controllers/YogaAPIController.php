@@ -195,11 +195,8 @@ class YogaAPIController extends Controller
     // create course
     public function createCourse(Request $request)
     {
-<<<<<<< HEAD
-=======
-        // request's day_of_week, time_of_course, capacity, duration, price_per_class, type_of_class, description, mode
->>>>>>> main
         try{
+            $request['date'] = Carbon::createFromFormat('d/m/Y', $$request['date'])->format('Y-m-d');
             $course = YogaCourse::create($request->all());
             return response()->json([
                 'message' => 'Course created successfully',
